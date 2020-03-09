@@ -1,5 +1,5 @@
 {
-  "name": "the-seed-utils",
+  "name": "@metaverse-systems/the-seed-utils",
   "version": "0.0.2",
   "description": "Utilities for the seed",
   "main": "index.js",
