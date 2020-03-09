@@ -1,0 +1,25 @@
+{
+  "name": "the-seed-utils",
+  "version": "0.0.2",
+  "description": "Utilities for the seed",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/metaversesystems/the-seed-utils.git"
+  },
+  "author": "Tim Schwartz <tim@metaverse.systems>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/metaversesystems/the-seed-utils/issues"
+  },
+  "homepage": "https://github.com/metaversesystems/the-seed-utils#readme",
+  "dependencies": {
+    "inquirer": "^7.0.6"
+  },
+  "bin": {
+    "the-seed-config": "./create_config.js"
+  }
+}
