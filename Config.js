@@ -27,7 +27,8 @@ const qs = [
   },
   {
     name: "projects.directory",
-    message: "Default directory for projects?"
+    message: "Default directory for projects?",
+    default: homedir + "/projects/"
   }
 ];
 
