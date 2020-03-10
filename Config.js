@@ -4,26 +4,30 @@ const inquirer = require('inquirer');
 
 const homedir = os.homedir();
 
-const author_qs = [
+const qs = [
   { 
-    name: "email",
+    name: "author.email",
     message: "E-mail address?"
   },
   {
-    name: "name",
+    name: "author.name",
     message: "Name?"
   },
   {
-    name: "url",
+    name: "author.url",
     message: "Website address?"
   },
   {
-    name: "codeSigningCert",
+    name: "author.codeSigningCert",
     message: "Code signing certificate?"
   },
   {
-    name: "codeSigningKey",
+    name: "author.codeSigningKey",
     message: "Code signing key?"
+  },
+  {
+    name: "projects.directory",
+    message: "Default directory for projects?"
   }
 ];
 
@@ -47,25 +51,27 @@ class Config {
       this.config = JSON.parse(fs.readFileSync(this.config_dir + this.config_filename));
     }
 
-    if(this.config.author === undefined) {
-      this.config.author = {};
-    }
+    if(this.config.author === undefined) this.config.author = {};
+    if(this.config.projects === undefined) this.config.projects = {};
   }
 
   Questions() {
     var self = this;
-    author_qs.forEach(function(q) {
-      if(self.config.author[q.name] !== undefined) {
-        q.default = self.config.author[q.name];
-      }
+    qs.forEach(function(q) {
+      let [section, name] = q.name.split(".");
+        if(self.config[section][name] !== undefined) {
+          q.default = self.config[section][name];
+        }
     });
-    return author_qs;
+    return qs;
   }
 
   Answer(answers) {
     var self = this;
-    Object.keys(answers).forEach(function(answer) {
-      self.config.author[answer] = answers[answer];
+    Object.keys(answers).forEach(function(section) {
+      Object.keys(answers[section]).forEach(function(name) {
+        self.config[section][name] = answers[section][name];
+      });
     });
 
     fs.writeFileSync(self.config_dir + self.config_filename, JSON.stringify(self.config, null, 2));
