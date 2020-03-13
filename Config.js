@@ -19,11 +19,11 @@ const qs = [
   },
   {
     name: "author.codeSigningCert",
-    message: "Code signing certificate?"
+    message: "Path to code signing certificate?"
   },
   {
     name: "author.codeSigningKey",
-    message: "Code signing key?"
+    message: "Path to code signing key?"
   },
   {
     name: "projects.directory",
@@ -52,8 +52,17 @@ class Config {
       this.config = JSON.parse(fs.readFileSync(this.config_dir + this.config_filename));
     }
 
-    if(this.config.author === undefined) this.config.author = {};
-    if(this.config.projects === undefined) this.config.projects = {};
+    qs.forEach(q => {
+      let [section, option] = q.name.split(".");
+
+      if(this.config[section] === undefined) {
+        this.config[section] = {};
+      }
+
+      if(this.config[section][option] === undefined) {
+        this.config[section][option] = "";
+      }
+    });
   }
 
   Questions() {
