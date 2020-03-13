@@ -75,7 +75,11 @@ class Config {
       });
     });
 
-    fs.writeFileSync(self.config_dir + self.config_filename, JSON.stringify(self.config, null, 2));
+    this.save();
+  }
+
+  save() {
+    fs.writeFileSync(this.config_dir + this.config_filename, JSON.stringify(this.config, null, 2));
   }
 }
 
