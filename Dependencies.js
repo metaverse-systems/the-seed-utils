@@ -19,7 +19,8 @@ const deps = {
     "Libraries": {
       "jsoncpp": false,
       "uuid": false,
-      "ecs-cpp": false
+      "ecs-cpp": false,
+      "the-seed": false
     },
     "Files": {
     }
@@ -39,7 +40,8 @@ const deps = {
     },
     "Libraries": {
       "jsoncpp": false,
-      "ecs-cpp": false
+      "ecs-cpp": false,
+      "the-seed": false
     },
     "Files": {
       "include/mingw.thread.h": false,

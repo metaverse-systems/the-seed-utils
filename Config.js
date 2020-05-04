@@ -18,12 +18,9 @@ const qs = [
     message: "Website address?"
   },
   {
-    name: "author.codeSigningCert",
-    message: "Path to code signing certificate?"
-  },
-  {
-    name: "author.codeSigningKey",
-    message: "Path to code signing key?"
+    name: "projects.scope",
+    message: "Default scope?",
+    default: "company-name"
   },
   {
     name: "projects.directory",
