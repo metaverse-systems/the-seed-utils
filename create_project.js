@@ -16,12 +16,6 @@ if(questions.size == 0) {
   console.log("No certificates found.");
 } else {
   inquirer.prompt(questions).then(answers => {
-    project.package.codeSigning = {
-      "cert": answers.certificate + "/cert.pem",
-      "key": answers.certificate + "/key.pem"
-    };
-
-    project.save();
-//    fs.writeFileSync(project.dir + "/package.json", JSON.stringify(project.config, null, 2));
+    project.ChooseCertificate(answers.certificate);
   });
 }

@@ -5,7 +5,7 @@ const { execSync } = require('child_process');
 
 const homedir = os.homedir();
 
-class Project {
+class ResourcePak {
   constructor(name, dir) {
     this.config_dir = (dir === undefined) ? (homedir + "/.config/the-seed/") : dir;
     this.config_filename = "config.json";
@@ -17,9 +17,10 @@ class Project {
 
     this.config = JSON.parse(fs.readFileSync(this.config_dir + this.config_filename));
 
-    this.dir = this.config.projects.directory + name; 
+    this.name = name;
+    this.dir = "./" + name; 
     if(fs.existsSync(this.dir)) {
-      console.log("There is already a project named '" + name + "' in '" + this.config.projects.directory + "'.");
+      console.log("There is already a resource pak named '" + name + "' in this directory.");
       return;
     } else {
       fs.mkdirSync(this.dir);
@@ -31,23 +32,19 @@ class Project {
     this.package.license = "UNLICENSED";
     this.package.name = this.config.projects.scope + "/" + this.package.name;
     delete this.package.main;
+    this.package.scripts = {
+      "build": "the-seed-resource-build"
+    };
+    this.package.resources = [
+    ];
 
     this.Save();
-    console.log("New project created in '" + this.dir + "', please modify 'package.json' as necessary.");
+    console.log("New resource pak created in '" + this.dir + "', please modify 'package.json' as necessary.");
   }
 
   Save() {
     fs.writeFileSync(this.dir + "/package.json", JSON.stringify(this.package, null, 2));
   }
-
-  ChooseCertificate(certificate) {
-    this.package.codeSigning = {
-      "cert": certificate + "/cert.pem",
-      "key": certificate + "/key.pem"
-    };
-
-    this.Save();
-  }
 }
 
-module.exports = Project;
+module.exports = ResourcePak;

@@ -1,6 +1,6 @@
 {
   "name": "@metaverse-systems/the-seed-utils",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "Utilities for the seed",
   "main": "index.js",
   "scripts": {
@@ -17,13 +17,21 @@
   },
   "homepage": "https://github.com/metaversesystems/the-seed-utils#readme",
   "dependencies": {
-    "inquirer": "^7.0.6"
+    "inquirer": "^7.0.6",
+    "mime-db": "^1.44.0",
+    "mime-type": "^3.0.7"
   },
   "bin": {
     "the-seed-config": "create_config.js",
     "the-seed-dependencies": "check_deps.js",
     "the-seed-certificates": "cert_config.js",
-    "the-seed-project": "create_project.js"
+    "the-seed-project": "create_project.js",
+    "the-seed-component": "create_component.js",
+    "the-seed-system": "create_system.js",
+    "the-seed-program": "create_program.js",
+    "the-seed-resource": "create_resourcepak.js",
+    "the-seed-resource-build": "build_resourcepak.js",
+    "the-seed-libraries-build": "build_libraries.js"
   },
   "devDependencies": {},
   "keywords": []
