@@ -7,6 +7,8 @@ const { execSync } = require('child_process');
 
 const libraries = JSON.parse(fs.readFileSync("./package.json")).dependencies;
 
+if(libraries == null) process.exit();
+
 Object.keys(libraries).forEach((library) => {
   console.log("Building " + library);
 
