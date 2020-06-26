@@ -40,7 +40,7 @@ class Skeleton {
     this.package.version = "0.0.1";
     this.package.scripts = {
       "test": "echo \"Error: no test specified\" && exit 1",
-      "build": "npm i; the-seed-libraries-build; ./autogen.sh && ./configure && make"
+      "build": "the-seed-libraries-build; ./autogen.sh && ./configure && make"
     };
     delete this.package.main;
 
