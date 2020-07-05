@@ -4,10 +4,10 @@ const fs = require('fs');
 const process = require('process');
 const build_target = process.argv[2] !== undefined ? process.argv[2] : "Native";
 
-const Config = require('@metaverse-systems/the-seed-utils/Config');
+const Config = require('./Config');
 const config_file = new Config();
 
-const Dependencies = require('@metaverse-systems/the-seed-utils/Dependencies');
+const Dependencies = require('./Dependencies');
 const deps = new Dependencies().Dependencies();
 
 const target = deps[build_target];
@@ -22,7 +22,7 @@ Object.keys(target["Build tools"]).forEach(tool => {
 let autogen_command = "./autogen.sh";
 try {
   let result = execSync(autogen_command).toString();
-  console.log(result);
+  console.log("Completed " + autogen_command);
 } catch(err) {
   console.log(err);
 }
@@ -34,40 +34,15 @@ let configure_command = "PKG_CONFIG_PATH=" + target["Prefix directory"] +"/lib/p
 configure_command += "./configure --prefix=" + target["Prefix directory"] + host;
 try {
   let result = execSync(configure_command).toString();
-  console.log(result);
+  console.log("Completed " + configure_command);
 } catch(err) {
   console.log(err);
 }
 
-let make_command = "make";
+let make_command = "make clean; make";
 try {
   let result = execSync(make_command).toString();
-  console.log(result);
+  console.log("Completed " + make_command);
 } catch(err) {
   console.log(err);
 }
-
-if(build_target == "Native") {
-  process.exit(0);
-}
-
-let files = fs.readdirSync("src/.libs");
-files.forEach(file => {
-  if(!file.endsWith(".dll")) {
-    return;
-  }
-
-  let copy_command = "cp src/.libs/" + file + " ..";
-  try {
-    let result = execSync(copy_command).toString();
-  } catch(err) {
-    console.log(err);
-  }
-
-  let strip_command = "strip ../" + file;
-  try {
-    let result = execSync(strip_command).toString();
-  } catch(err) {
-    console.log(err);
-  }
-});

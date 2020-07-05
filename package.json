@@ -31,7 +31,8 @@
     "the-seed-program": "create_program.js",
     "the-seed-resource": "create_resourcepak.js",
     "the-seed-resource-build": "build_resourcepak.js",
-    "the-seed-libraries-build": "build_libraries.js"
+    "the-seed-libraries-build": "build_libraries.js",
+    "the-seed-build": "Build.js"
   },
   "devDependencies": {},
   "keywords": []

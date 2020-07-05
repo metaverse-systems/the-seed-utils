@@ -7,6 +7,9 @@ const { execSync } = require('child_process');
 
 const homedir = os.homedir();
 
+const build_command = "npm i; the-seed-libraries-build; the-seed-build";
+const build_win64_command = "npm i; the-seed-libraries-build Win64; the-seed-build Win64";
+
 class Skeleton {
   constructor(skeleton_type, name, dir) {
     this.skeleton_type = skeleton_type;
@@ -40,7 +43,8 @@ class Skeleton {
     this.package.version = "0.0.1";
     this.package.scripts = {
       "test": "echo \"Error: no test specified\" && exit 1",
-      "build": "the-seed-libraries-build; ./autogen.sh && ./configure && make"
+      "build": build_command,
+      "build-win64": build_win64_command
     };
     delete this.package.main;
 
@@ -49,9 +53,10 @@ class Skeleton {
   }
 
   ExpandSkeleton() {
-    const expand = "tar xvf " + this.packagePath + "/skeletons/" + this.skeleton_type + ".tar";
-    execSync(expand);
-    fs.renameSync("./skeleton_" + this.skeleton_type, this.dir);
+//    const expand = "tar xvf " + this.packagePath + "/skeletons/" + this.skeleton_type + ".tar";
+    const copy_skel = "cp -r " + __dirname + "/skeletons/" + this.skeleton_type + " " + this.dir;
+    execSync(copy_skel);
+//    fs.renameSync("./skeleton_" + this.skeleton_type, this.dir);
 
     const variables = {
       'AUTHOR_EMAIL': this.config.author.email,
