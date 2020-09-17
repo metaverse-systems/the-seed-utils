@@ -53,3 +53,5 @@ Makefile
 *.la
 *.lo
 libtool
+dist
+node_modules
