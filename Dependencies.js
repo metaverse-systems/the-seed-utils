@@ -5,7 +5,7 @@ const { execSync } = require('child_process');
 const deps = {
   "Native": {
     "Prefix": "",
-    "Prefix directory": "/usr",
+    "Prefix directory": "/usr/local",
     "Build tools": {
       "libtoolize": false,
       "aclocal": false,
