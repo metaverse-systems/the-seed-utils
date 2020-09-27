@@ -33,7 +33,7 @@ Object.keys(libraries).forEach((library) => {
 
   let files = fs.readdirSync(path + "/dist");
   files.forEach((file) => {
-    console.log("Copying " + file + " to ./dist");
+    console.log("Copying " + path + "/dist/" + file + " to ./dist");
     fs.copyFileSync(path + "/dist/" + file, "./dist/" + file);
   });
 
