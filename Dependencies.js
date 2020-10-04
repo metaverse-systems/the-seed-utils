@@ -12,6 +12,7 @@ const deps = {
       "autoheader": false,
       "automake": false,
       "autoconf": false,
+      "pkg-config": false
     },
     "Compilers": {
       "g++": false,
@@ -20,7 +21,8 @@ const deps = {
       "jsoncpp": false,
       "uuid": false,
       "ecs-cpp": false,
-      "the-seed": false
+      "the-seed": false,
+      "LIEF": false
     },
     "Files": {
     }
@@ -34,6 +36,7 @@ const deps = {
       "autoheader": false,
       "automake": false,
       "autoconf": false,
+      "x86_64-w64-mingw32-pkg-config": false
     },
     "Compilers": {
       "g++": false
@@ -57,23 +60,22 @@ class Dependencies {
       let prefix = deps[target].Prefix;
       let prefixDir = deps[target]["Prefix directory"];
 
-      let pkg_config_path = prefixDir + "/lib/pkgconfig";
-      let pkg_config_command = "PKG_CONFIG_PATH=" + pkg_config_path + " pkg-config --exists ";
+      Object.keys(deps[target]["Build tools"]).forEach(tool => {
+        let check_command = "which " + tool;
+        try {
+          let result = execSync(check_command).toString();
+          deps[target]["Build tools"][tool] = result;
+        } catch(err) {
+        }
+      });
+
+      let pkg_config_command = prefix + "pkg-config --exists ";
 
       Object.keys(deps[target].Libraries).forEach(lib => {
         let check_command = pkg_config_command + lib;
         try {
           execSync(check_command);
           deps[target].Libraries[lib] = true;
-        } catch(err) {
-        }
-      });
-
-      Object.keys(deps[target]["Build tools"]).forEach(tool => {
-        let check_command = "which " + tool;
-        try {
-          let result = execSync(check_command).toString();
-          deps[target]["Build tools"][tool] = result;
         } catch(err) {
         }
       });

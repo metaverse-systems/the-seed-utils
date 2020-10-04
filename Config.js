@@ -63,21 +63,19 @@ class Config {
   }
 
   Questions() {
-    var self = this;
-    qs.forEach(function(q) {
+    qs.forEach((q) => {
       let [section, name] = q.name.split(".");
-        if(self.config[section][name] !== undefined) {
-          q.default = self.config[section][name];
+        if(this.config[section][name] !== undefined) {
+          q.default = this.config[section][name];
         }
     });
     return qs;
   }
 
   Answer(answers) {
-    var self = this;
-    Object.keys(answers).forEach(function(section) {
-      Object.keys(answers[section]).forEach(function(name) {
-        self.config[section][name] = answers[section][name];
+    Object.keys(answers).forEach((section) => {
+      Object.keys(answers[section]).forEach((name) => {
+        this.config[section][name] = answers[section][name];
       });
     });
 

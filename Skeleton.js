@@ -7,8 +7,8 @@ const { execSync } = require('child_process');
 
 const homedir = os.homedir();
 
-const build_command = "npm i; the-seed-libraries-build; the-seed-build";
-const build_win64_command = "npm i; the-seed-libraries-build Win64; the-seed-build Win64";
+const build_command = "npm i; rm -r ./dist; mkdir dist; the-seed-libraries-build; the-seed-build";
+const build_win64_command = "npm i; rm -r ./dist; mkdir dist; the-seed-libraries-build Win64; the-seed-build Win64";
 
 class Skeleton {
   constructor(skeleton_type, name, dir) {

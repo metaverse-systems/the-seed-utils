@@ -35,7 +35,11 @@ const libsExclude = [
   'msi',
   'stdc++',
   'c',
-  'gcc'
+  'gcc',
+  'gcc_s',
+  'm',
+  'pthread',
+  'undefined'
 ];
 
 let copiedDeps = [];
@@ -73,10 +77,6 @@ try {
   console.log("Completed " + make_command);
 } catch(err) {
   console.log(err);
-}
-
-if(!fs.existsSync("./dist")) {
-  fs.mkdirSync("./dist");
 }
 
 let files = fs.readdirSync("./src/.libs");
