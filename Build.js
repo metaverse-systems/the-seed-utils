@@ -25,13 +25,21 @@ const seed = ffi.Library(libDir + "/libthe-seed", {
   'depGet': [ 'void', [ 'string', 'string', 'int' ] ]
 });
 
-const libsExclude = [
+let libsExclude = [
   'kernel32',
   'msvcrt',
   'rpcrt4',
   'advapi32',
   'user32',
   'ws2_32',
+  'gdi32',
+  'imm32',
+  'ole32',
+  'oleaut32',
+  'setupapi',
+  'shell32',
+  'version',
+  'winmm',
   'msi',
   'stdc++',
   'c',
@@ -39,7 +47,8 @@ const libsExclude = [
   'gcc_s',
   'm',
   'pthread',
-  'undefined'
+  'undefined',
+  'ld-linux-x86-64'
 ];
 
 let copiedDeps = [];
@@ -99,6 +108,20 @@ files.forEach((file) => {
   const name = "./src/.libs/" + file;
   const deps = LibraryDependencies(name);
 
+  let custom_excludes = JSON.parse(fs.readFileSync("package.json"))._excludes;
+  if(custom_excludes !== undefined) {
+     custom_excludes.forEach((ex) => {
+       libsExclude.push(ex);
+     });
+  }
+
+  let custom_includes = JSON.parse(fs.readFileSync("package.json"))._includes;
+  if(custom_includes !== undefined) {
+    custom_includes.forEach((inc) => {
+      deps.push(inc);
+    });
+  }
+
   copyDependencies(deps);
 });
 
@@ -112,9 +135,9 @@ function copyDependencies(deps) {
     }
 
     if(libsExclude.indexOf(library) != -1) return;
-    if(copiedDeps.indexOf(library) != -1) {
-      return;
-    }
+    if(copiedDeps.indexOf(library) != -1) return;
+    if(library === undefined) return;
+
     copiedDeps.push(library);
 
     let libDir = "";
