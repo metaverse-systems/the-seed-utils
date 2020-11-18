@@ -51,6 +51,11 @@ let libsExclude = [
   'ld-linux-x86-64'
 ];
 
+const mingwCopy = [
+  'libgcc_s_seh-1.dll',
+  'libstdc++-6.dll'
+];
+
 let copiedDeps = [];
 
 Object.keys(target["Build tools"]).forEach(tool => {
@@ -86,6 +91,28 @@ try {
   console.log("Completed " + make_command);
 } catch(err) {
   console.log(err);
+}
+
+let mingw_dir = "/usr/lib/gcc/x86_64-w64-mingw32/";
+let mingw_version = execSync("ls " + mingw_dir + "|grep win32|tail -n1").toString();
+
+mingw_dir += mingw_version.replace(/\n$/, '') + "/";
+
+if(build_target == "Win64") {
+  mingwCopy.forEach((dll) => {
+    fs.copyFileSync(mingw_dir + dll, "./dist/" + dll);
+    let library = dll.split(".");
+    copiedDeps.push(library[0]);
+  });
+
+  let config = JSON.parse(fs.readFileSync("./package.json"))._the_seed;
+  if(config !== undefined) {
+    if(config["Win64"] !== undefined) {
+      config["Win64"].depExcludes.forEach((dep) => {
+        copiedDeps.push(dep);
+      });
+    }
+  }
 }
 
 let files = fs.readdirSync("./src/.libs");
