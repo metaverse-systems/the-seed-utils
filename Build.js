@@ -11,7 +11,7 @@ const deps = new Dependencies().Dependencies();
 const target = deps[build_target];
 const LibraryDependencies = require('./LibraryDependencies');
 
-let libdirCommand = "PKG_CONFIG_PATH=" + target["Prefix directory"] +"/lib/pkgconfig/ pkg-config the-seed --variable=libdir";
+const libdirCommand = "PKG_CONFIG_PATH=" + target["Prefix directory"] +"/lib/pkgconfig/ pkg-config the-seed --variable=libdir";
 let libDir = "";
 try {
   libDir = execSync(libdirCommand).toString().replace(/\n/g, '');
@@ -56,7 +56,7 @@ const mingwCopy = [
   'libstdc++-6.dll'
 ];
 
-let copiedDeps = [];
+const copiedDeps = [];
 
 Object.keys(target["Build tools"]).forEach(tool => {
   if(target["Build tools"][tool] === false) {
@@ -65,9 +65,9 @@ Object.keys(target["Build tools"]).forEach(tool => {
   }
 });
 
-let autogen_command = "./autogen.sh";
+const autogen_command = "./autogen.sh";
 try {
-  let result = execSync(autogen_command).toString();
+  const result = execSync(autogen_command).toString();
   console.log("Completed " + autogen_command);
 } catch(err) {
   console.log(err);
@@ -76,25 +76,26 @@ try {
 let host = target["Prefix"] ? " --host=" + target["Prefix"] : "";
 host = host.substring(0, host.length - 1); 
 
-let configure_command = "PKG_CONFIG_PATH=" + target["Prefix directory"] +"/lib/pkgconfig/ ";
-configure_command += "./configure --prefix=" + target["Prefix directory"] + host;
+const configure_command = "PKG_CONFIG_PATH=" + target["Prefix directory"] +"/lib/pkgconfig/ " +
+                          "./configure --prefix=" + target["Prefix directory"] + host;
 try {
-  let result = execSync(configure_command).toString();
+  const result = execSync(configure_command).toString();
   console.log("Completed " + configure_command);
 } catch(err) {
   console.log(err);
 }
 
-let make_command = "make clean; make";
+const coreCount = require("os").cpus().length;
+const make_command = "make clean; make -j " + coreCount;
 try {
-  let result = execSync(make_command).toString();
+  const result = execSync(make_command).toString();
   console.log("Completed " + make_command);
 } catch(err) {
   console.log(err);
 }
 
 let mingw_dir = "/usr/lib/gcc/x86_64-w64-mingw32/";
-let mingw_version = execSync("ls " + mingw_dir + "|grep win32|tail -n1").toString();
+const mingw_version = execSync("ls " + mingw_dir + "|grep win32|tail -n1").toString();
 
 mingw_dir += mingw_version.replace(/\n$/, '') + "/";
 
@@ -115,7 +116,7 @@ if(build_target == "Win64") {
   }
 }
 
-let files = fs.readdirSync("./src/.libs");
+const files = fs.readdirSync("./src/.libs");
 files.forEach((file) => {
   if(build_target == "Win64") {
     let ext = file.substr(file.length - 4);
@@ -135,14 +136,14 @@ files.forEach((file) => {
   const name = "./src/.libs/" + file;
   const deps = LibraryDependencies(name);
 
-  let custom_excludes = JSON.parse(fs.readFileSync("package.json"))._excludes;
+  const custom_excludes = JSON.parse(fs.readFileSync("package.json"))._excludes;
   if(custom_excludes !== undefined) {
      custom_excludes.forEach((ex) => {
        libsExclude.push(ex);
      });
   }
 
-  let custom_includes = JSON.parse(fs.readFileSync("package.json"))._includes;
+  const custom_includes = JSON.parse(fs.readFileSync("package.json"))._includes;
   if(custom_includes !== undefined) {
     custom_includes.forEach((inc) => {
       deps.push(inc);

@@ -3,19 +3,26 @@ const inquirer = require('inquirer');
 const path = require('path')
 const args = process.argv;
 const fs = require('fs');
-const mime = require('mime-type/with-db');
+const mime = require('mime-types');
 
 const config = JSON.parse(fs.readFileSync("./package.json"));
 
+const resources = [];
+
 config.resources.forEach((resource) => {
-  resource.mime_type = mime.contentType(resource.filename);
-  var stats = fs.statSync(resource.filename)
-  resource.bytes = stats["size"];
+  const stats = fs.statSync(resource.filename);
+  const r = {
+    "name": resource.name,
+    "mime_type": mime.lookup(resource.filename),
+    "bytes": stats["size"],
+  };
+  resources.push(r);
 });
 
 const header = {
-  "header_size": JSON.stringify(config.resources).length.toString().padStart(10, 0),
-  "resources": config.resources
+  "name": config["name"],
+  "header_size": JSON.stringify(resources).length.toString().padStart(10, 0),
+  "resources": resources,
 };
 
 header.header_size = JSON.stringify(header).length.toString().padStart(10, 0);
@@ -24,7 +31,7 @@ let [org, name] = config.name.split("\/");
 
 fs.writeFileSync(name + ".pak", JSON.stringify(header));
 
-header.resources.forEach((resource) => {
-  let data = fs.readFileSync(resource.filename);
+config.resources.forEach((resource) => {
+  const data = fs.readFileSync(resource.filename);
   fs.writeFileSync(name + ".pak", data, { flag: "a+" });
 });
